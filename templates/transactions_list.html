@@ -1,0 +1,61 @@
+{% extends "app_base.html" %}
+{% block title %}Transactions{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Transactions</h2>
+    <div class="page-actions">
+        <a class="btn-small" href="{{ url_for('transactions.add_manual') }}">+ Add manual</a>
+        <a class="btn-small" href="{{ url_for('transactions.simulate') }}">Simulate SMS/Notification</a>
+        <a class="btn-small" href="{{ url_for('transactions.upload_statement') }}">Upload statement</a>
+    </div>
+</div>
+
+{% if transactions %}
+<div class="table-wrap">
+    <table class="ledger-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Merchant</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Source</th>
+                <th>Category</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+            <tr>
+                <td>{{ t.date.strftime('%d %b %Y') }}</td>
+                <td>{{ t.merchant or '-' }}</td>
+                <td class="{{ 'amt-income' if t.type == 'income' else 'amt-expense' }}">
+                    {{ '+' if t.type == 'income' else '-' }}₹{{ '%.2f'|format(t.amount) }}
+                </td>
+                <td><span class="tag">{{ t.type }}</span></td>
+                <td><span class="tag source-{{ t.source }}">{{ t.source }}</span></td>
+                <td>
+                    <form method="POST" action="{{ url_for('transactions.update_category', txn_id=t.id) }}" class="inline-form">
+                        <select name="category_id" onchange="this.form.submit()">
+                            <option value="">Uncategorized</option>
+                            {% for c in categories %}
+                            <option value="{{ c.id }}" {{ 'selected' if t.category_id == c.id else '' }}>{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('transactions.delete_transaction', txn_id=t.id) }}"
+                          onsubmit="return confirm('Delete this transaction?');">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="note">No transactions yet. Add one manually, simulate an SMS/notification, or upload a statement.</p>
+{% endif %}
+{% endblock %}

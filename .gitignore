@@ -1,0 +1,37 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local application data
+instance/*.db
+instance/*.sqlite
+instance/*.sqlite3
+
+# Node
+node_modules/
+mobile/node_modules/
+
+# Generated build output
+build/
+dist/
+
+# Android / Gradle generated files
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/capacitor-cordova-android-plugins/build/
+mobile/android/local.properties
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,36 @@
+{% extends "app_base.html" %}
+{% block title %}Budget{% endblock %}
+{% block content %}
+<h2>Monthly budget monitoring</h2>
+
+<form method="POST" class="stacked-form" style="margin-bottom:32px;">
+    <div class="field">
+        <label>Category</label>
+        <select name="category_id" required>
+            {% for c in categories %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="field">
+        <label>Monthly limit (₹)</label>
+        <input type="number" step="0.01" name="monthly_limit" required>
+    </div>
+    <button type="submit" class="btn-primary" style="width:auto; padding:10px 28px;">Set budget</button>
+</form>
+
+{% if budget_status %}
+{% for b in budget_status %}
+<div class="budget-row {{ 'over' if b.over else '' }}">
+    <div class="budget-row-top">
+        <strong>{{ b.category }}</strong>
+        <span>₹{{ '%.2f'|format(b.spent) }} / ₹{{ '%.2f'|format(b.limit) }}</span>
+    </div>
+    <div class="budget-bar"><div class="budget-bar-fill" style="width:{{ b.pct }}%;"></div></div>
+    {% if b.over %}<div class="budget-alert">⚠ Over budget this month</div>{% endif %}
+</div>
+{% endfor %}
+{% else %}
+<p class="note">No budgets set yet.</p>
+{% endif %}
+{% endblock %}

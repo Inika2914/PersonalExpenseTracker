@@ -1,0 +1,21 @@
+{
+  "name": "personal-expense-tracker-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android wrapper (Capacitor) for the Personal Expense Tracker Flask app, with native SMS and UPI-notification capture.",
+  "scripts": {
+    "setup": "npm install && npx cap add android && node scripts/patch-android.js && npm run assets && npx cap sync android",
+    "patch": "node scripts/patch-android.js",
+    "assets": "capacitor-assets generate --android",
+    "sync": "npx cap sync android",
+    "open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

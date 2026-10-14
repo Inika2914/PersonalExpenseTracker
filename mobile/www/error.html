@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cannot reach server</title>
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #F6F1E7; color: #16243B; font-family: Arial, sans-serif; }
+    main { max-width: 420px; margin: 0 auto; padding: 48px 24px; }
+    img { width: 72px; height: 72px; border-radius: 16px; }
+    h1 { font-family: Georgia, serif; font-size: 1.5rem; margin: 18px 0 8px; }
+    li { margin-bottom: 8px; line-height: 1.45; }
+    code { background: #fff; padding: 1px 6px; border-radius: 3px; }
+    .note { color: #6B7280; font-size: .9rem; margin-top: 22px; }
+  </style>
+</head>
+<body>
+<main>
+  <img src="logo-icon.svg" alt="">
+  <h1>Can&rsquo;t reach the server</h1>
+  <p>The app could not load your Personal Expense Tracker server. Check that:</p>
+  <ul>
+    <li>the Flask server is running (<code>python app.py</code>)</li>
+    <li>the phone is on the same Wi-Fi as the computer</li>
+    <li>the address in <code>mobile/capacitor.config.json</code> is correct, then run <code>npx cap sync android</code> and rebuild</li>
+    <li>Windows Firewall allows Python on private networks</li>
+  </ul>
+  <p class="note">Payments captured from SMS and UPI notifications are saved on the phone and uploaded automatically once the server is reachable again. Close and reopen the app to retry.</p>
+</main>
+</body>
+</html>

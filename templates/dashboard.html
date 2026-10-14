@@ -1,0 +1,50 @@
+{% extends "app_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="summary-card">
+    <div class="label">Welcome back</div>
+    <div class="welcome">{{ user.name }}</div>
+    <div class="summary-grid">
+        <div>
+            <div class="label">Income</div>
+            <div class="summary-figure amt-income">₹{{ '%.2f'|format(total_income) }}</div>
+        </div>
+        <div>
+            <div class="label">Expense</div>
+            <div class="summary-figure amt-expense">₹{{ '%.2f'|format(total_expense) }}</div>
+        </div>
+        <div>
+            <div class="label">Balance</div>
+            <div class="summary-figure">₹{{ '%.2f'|format(balance) }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="page-header">
+    <h3>Recent activity</h3>
+    <a class="btn-small" href="{{ url_for('transactions.list_transactions') }}">View all ({{ txn_count }})</a>
+</div>
+
+{% if recent %}
+<div class="table-wrap">
+    <table class="ledger-table">
+                <thead><tr><th>Date</th><th>Merchant</th><th>Amount</th><th>Type</th><th>Category</th></tr></thead>
+        <tbody>
+            {% for t in recent %}
+            <tr>
+                <td>{{ t.date.strftime('%d %b %Y') }}</td>
+                <td>{{ t.merchant or '-' }}</td>
+                <td class="{{ 'amt-income' if t.type == 'income' else 'amt-expense' }}">
+                    {{ '+' if t.type == 'income' else '-' }}₹{{ '%.2f'|format(t.amount) }}
+                </td>
+                <td><span class="tag">{{ t.type }}</span></td>
+                <td>{{ t.category.name if t.category else 'Uncategorized' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="note">No transactions yet. <a href="{{ url_for('transactions.add_manual') }}">Add your first one</a>.</p>
+{% endif %}
+{% endblock %}

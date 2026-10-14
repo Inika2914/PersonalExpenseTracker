@@ -1,0 +1,47 @@
+{% extends "app_base.html" %}
+{% block title %}Simulate SMS/Notification{% endblock %}
+{% block content %}
+<h2>Simulate SMS / UPI notification capture</h2>
+<p class="note" style="margin-bottom:24px;">
+    Test harness for the web version. In the Android app, real bank SMS and UPI notifications are
+    captured automatically (see <a href="{{ url_for('capture.capture_page') }}">Phone Capture</a>)
+    and go through this same parser and categorization engine - paste sample text here to see it work.
+</p>
+
+<form method="POST" class="stacked-form">
+    <div class="field">
+        <label>Source</label>
+        <select name="source">
+            <option value="sms">Bank SMS</option>
+            <option value="notification">UPI App Notification</option>
+        </select>
+    </div>
+    <div class="field">
+        <label>Raw text</label>
+        <textarea name="raw_text" rows="3" style="width:100%; border:1.5px solid var(--line); border-radius:4px; padding:10px; font-family:'Inter',sans-serif;" placeholder="e.g. Rs.450.00 debited from A/c XX1234 to SWIGGY on 11-09-26 via UPI - HDFC Bank">{{ request.form.get('raw_text', '') }}</textarea>
+    </div>
+    <button type="submit" class="btn-primary" style="width:auto; padding:10px 28px;">Parse &amp; Add</button>
+</form>
+
+<div class="sample-box">
+    <strong>Try these samples:</strong>
+    <ul>
+        <li>Rs.450.00 debited from A/c XX1234 to SWIGGY on 11-09-26 via UPI - HDFC Bank</li>
+        <li>You paid Rs.220 to Uber via Google Pay</li>
+        <li>Rs.25000.00 credited to A/c XX1234 - Salary - SBI</li>
+    </ul>
+</div>
+
+{% if parsed_preview %}
+<div class="summary-card" style="margin-top:24px;">
+    <div class="label">Parsed result</div>
+    <p style="margin:12px 0 0; font-family:'Inter',sans-serif;">
+        Amount: ₹{{ parsed_preview.amount }} &nbsp;|&nbsp;
+        Type: {{ parsed_preview.type }} &nbsp;|&nbsp;
+        Merchant: {{ parsed_preview.merchant }} &nbsp;|&nbsp;
+        Bank/App: {{ parsed_preview.bank_or_app }} &nbsp;|&nbsp;
+        Category: {{ parsed_preview.category }}
+    </p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block body %}
+<header class="topbar">
+    <div class="topbar-row">
+        <a class="brand" href="{{ url_for('analysis.dashboard') }}">
+            <img class="brand-logo" src="{{ url_for('static', filename='img/logo-icon.svg') }}" alt="" width="34" height="34">
+            <span class="brand-text">Personal <span class="accent">Expense Tracker</span></span>
+        </a>
+        <div class="topbar-user">
+            <span class="user-chip">{{ current_user.name }}</span>
+            <a class="btn-ghost" href="{{ url_for('auth.logout') }}">Logout</a>
+        </div>
+    </div>
+    <nav class="topbar-nav">
+        <a href="{{ url_for('analysis.dashboard') }}" class="{{ 'active' if request.path == url_for('analysis.dashboard') else '' }}">Dashboard</a>
+        <a href="{{ url_for('transactions.list_transactions') }}" class="{{ 'active' if request.path.startswith('/transactions') else '' }}">Transactions</a>
+        <a href="{{ url_for('analysis.charts') }}" class="{{ 'active' if request.path == url_for('analysis.charts') else '' }}">Charts</a>
+        <a href="{{ url_for('analysis.budget') }}" class="{{ 'active' if request.path == url_for('analysis.budget') else '' }}">Budget</a>
+        <a href="{{ url_for('analysis.report_view') }}" class="{{ 'active' if request.path.startswith('/analysis/report') else '' }}">Report</a>
+        <a href="{{ url_for('capture.capture_page') }}" class="{{ 'active' if request.path == url_for('capture.capture_page') else '' }}">Phone Capture</a>
+    </nav>
+</header>
+
+<main class="page">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">
+                    <span class="user-chip">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="8" r="4" fill="currentColor"/>
+                            <path d="M4 20c0-4.4 3.6-7 8-7s8 2.6 8 7" fill="currentColor"/>
+                        </svg>
+                        {{ current_user.name }}
+                    </span>
+                    <button onclick="this.parentElement.remove()">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='js/native.js') }}"></script>
+{% block scripts %}{% endblock %}
+{% endblock %}

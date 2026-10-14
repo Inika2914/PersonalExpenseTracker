@@ -1,0 +1,11 @@
+{
+  "appId": "com.kongu.expensetracker",
+  "appName": "Personal Expense Tracker",
+  "webDir": "www",
+  "backgroundColor": "#16243B",
+  "server": {
+    "url": "http://10.20.30.6:5000",
+    "cleartext": true,
+    "errorPath": "error.html"
+  }
+}

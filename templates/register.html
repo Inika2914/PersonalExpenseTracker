@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block body %}
+<div class="auth-wrap">
+    <div class="auth-side">
+        <div class="ledger-lines"></div>
+        <div class="brand-block">
+            <img class="auth-logo" src="{{ url_for('static', filename='img/logo-icon-outline.svg') }}" alt="Personal Expense Tracker logo" width="88" height="88">
+            <div class="brand-mark">Personal<br>Expense <span>Tracker</span></div>
+            <p class="tagline">Every rupee, entered once and understood forever. Track income, expenses, and where it all actually goes.</p>
+        </div>
+    </div>
+    <div class="auth-form-side">
+        <div class="auth-form">
+            <div class="auth-mobile-brand">
+                <img src="{{ url_for('static', filename='img/logo-icon.svg') }}" alt="" width="52" height="52">
+                <div><small>PERSONAL</small><strong>Expense <span>Tracker</span></strong></div>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">
+                            <span>{{ message }}</span>
+                            <button onclick="this.parentElement.remove()">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <h2>Open your ledger</h2>
+            <p class="sub">Create an account to start tracking.</p>
+            <form method="POST">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Create account</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

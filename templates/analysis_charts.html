@@ -1,0 +1,50 @@
+{% extends "app_base.html" %}
+{% block title %}Charts{% endblock %}
+{% block content %}
+<h2>Spending analysis</h2>
+
+<div class="chart-grid">
+    <div class="chart-box">
+        <h3 style="font-size:1rem; margin-bottom:16px;">Spend by category</h3>
+        <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="chart-box">
+        <h3 style="font-size:1rem; margin-bottom:16px;">Monthly trend</h3>
+        <canvas id="trendChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const categoryLabels = {{ category_labels|tojson }};
+const categoryValues = {{ category_values|tojson }};
+const monthLabels = {{ month_labels|tojson }};
+const monthValues = {{ month_values|tojson }};
+
+new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+        labels: categoryLabels,
+        datasets: [{
+            data: categoryValues,
+            backgroundColor: ['#16243B', '#B8863B', '#A6483C', '#2F6F4E', '#6B7280', '#DAD2C0', '#96692A']
+        }]
+    }
+});
+
+new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+        labels: monthLabels,
+        datasets: [{
+            label: 'Monthly expense',
+            data: monthValues,
+            borderColor: '#B8863B',
+            backgroundColor: 'rgba(184,134,59,0.15)',
+            tension: 0.25,
+            fill: true
+        }]
+    }
+});
+</script>
+{% endblock %}

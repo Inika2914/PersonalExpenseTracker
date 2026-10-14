@@ -1,0 +1,87 @@
+{% extends "app_base.html" %}
+{% block title %}Phone Capture{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h2>Phone capture</h2>
+    <a class="btn-small" href="{{ url_for('transactions.list_transactions') }}">View transactions</a>
+</div>
+
+<div id="cap-msg" class="cap-msg" hidden></div>
+
+<div id="browser-only" class="note-box" hidden>
+    <strong>You are viewing this in a web browser.</strong>
+    Automatic capture of bank SMS and UPI notifications only works inside the Android app,
+    because browsers are not allowed to read SMS or notifications. Until then you can test the same
+    parser with <a href="{{ url_for('transactions.simulate') }}">Simulate SMS / Notification</a>.
+</div>
+
+<div id="native-only" hidden>
+    <div class="cap-card">
+        <h3>Capture status</h3>
+        <p class="sub">Everything below must be green for fully automatic capture.</p>
+        <ul class="status-list">
+            <li><span>Phone linked to your account</span><b id="st-link" class="badge muted">…</b></li>
+            <li><span>SMS access (bank messages)</span><b id="st-sms" class="badge muted">…</b></li>
+            <li><span>Notification access (UPI apps)</span><b id="st-nl" class="badge muted">…</b></li>
+            <li><span>Last capture</span><b id="st-last" class="badge muted">…</b></li>
+            <li><span>Last upload to server</span><b id="st-upload" class="badge muted">…</b></li>
+        </ul>
+        <div class="btn-row">
+            <button class="btn-action" id="btn-sms" type="button">Allow SMS access</button>
+            <button class="btn-action" id="btn-nl" type="button">Enable notification access</button>
+            <button class="btn-action secondary" id="btn-link" type="button">Re-link this phone</button>
+        </div>
+        <p class="sub" style="margin-top:14px;">
+            Notification access opens Android's system screen - switch on <em>Personal Expense Tracker</em> there, then come back.
+        </p>
+    </div>
+
+    <div class="cap-card">
+        <h3>Import existing bank SMS</h3>
+        <p class="sub">Reads payment messages already in your inbox, so earlier transactions are not missed. Duplicates are ignored.</p>
+        <div class="field" style="margin-bottom:0;">
+            <label for="sync-days">Import messages from the last</label>
+            <select id="sync-days">
+                <option value="7">7 days</option>
+                <option value="30" selected>30 days</option>
+                <option value="90">90 days</option>
+            </select>
+        </div>
+        <div class="btn-row"><button class="btn-action" id="btn-sync" type="button">Import bank SMS</button></div>
+    </div>
+
+    <div class="cap-card">
+        <h3>Demo tools</h3>
+        <p class="sub">For testing and reviews. A simulated UPI notification is posted by this app and travels through the real listener, uploader and parser.</p>
+        <label for="sim-preset" style="font-size:0.8rem;color:var(--muted);">Sample notification</label>
+        <select id="sim-preset">
+            <option data-title="Google Pay" value="Paid ₹450.00 to Swiggy">Google Pay - Paid ₹450.00 to Swiggy</option>
+            <option data-title="PhonePe" value="Paid ₹220 to Uber">PhonePe - Paid ₹220 to Uber</option>
+            <option data-title="Paytm" value="₹180 paid to Chai Point successfully">Paytm - ₹180 paid to Chai Point</option>
+            <option data-title="Google Pay" value="You received ₹500.00 from Rahul Kumar">Google Pay - Received ₹500 from Rahul Kumar</option>
+        </select>
+        <input type="text" id="sim-text" value="Paid ₹450.00 to Swiggy" aria-label="Notification text">
+        <div class="btn-row">
+            <button class="btn-action secondary" id="btn-notify-perm" type="button">Allow demo notifications</button>
+            <button class="btn-action" id="btn-simulate" type="button">Simulate UPI notification</button>
+        </div>
+        <label class="inline"><input type="checkbox" id="demo-mode"> Accept SMS from any sender (demo mode - lets you test by texting this phone from another number)</label>
+    </div>
+
+    <div class="cap-card">
+        <h3>Privacy &amp; control</h3>
+        <ul class="plain">
+            <li>Only messages from <b>bank-style sender IDs</b> (such as VM-HDFCBK) that look like a payment are sent to your server. Personal chats, OTPs and promotions never leave the phone.</li>
+            <li>UPI notifications are read only from payment apps (Google Pay, PhonePe, Paytm, BHIM and similar), never from chat apps.</li>
+            <li>Linked phones on this account: <b id="linked-count">{{ linked_devices }}</b></li>
+        </ul>
+        <div class="btn-row">
+            <button class="btn-action danger" id="btn-unlink" type="button">Unlink this phone &amp; revoke all phone access</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/capture.js') }}"></script>
+{% endblock %}

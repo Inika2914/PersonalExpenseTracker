@@ -1,0 +1,16 @@
+{% extends "app_base.html" %}
+{% block title %}Upload Statement{% endblock %}
+{% block content %}
+<h2>Upload bank statement (secondary option)</h2>
+<p class="note" style="margin-bottom:24px;">
+    Backup/bulk-import path for historical data. Expected columns: <code>amount</code>,
+    <code>type</code> (income/expense), <code>merchant</code>.
+</p>
+<form method="POST" enctype="multipart/form-data" class="stacked-form">
+    <div class="field">
+        <label>CSV or Excel file</label>
+        <input type="file" name="statement" accept=".csv,.xlsx,.xls" required>
+    </div>
+    <button type="submit" class="btn-primary" style="width:auto; padding:10px 28px;">Upload &amp; Import</button>
+</form>
+{% endblock %}
